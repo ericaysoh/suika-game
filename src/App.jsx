@@ -17,7 +17,7 @@ function App() {
       background: "#F7F4C8",
       width: 600,
       height: 800,
-      showAxes: false
+      // showAxes: false
     },
   });
 
@@ -38,6 +38,7 @@ function App() {
     });
     const topLine = Bodies.rectangle(310, 150, 620, 2, {
       isStatic: true,
+      isSensor: true,
       render: { fillStyle: "#E6B143" },
     });
 
@@ -73,7 +74,7 @@ function App() {
   }, []);
 
   function addFruit() {
-    const index = 7;
+    const index = 5;
     const fruit = FRUITS[index];
 
     const body = Bodies.circle(300, 50, fruit.radius, {
@@ -81,6 +82,8 @@ function App() {
       render: {
         sprite: { texture: `${fruit.name}.png` },
       },
+      restitution: 0.2,
+      // frictionAir: 0.01
     });
 
     World.add(world, body);

@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Bodies, Engine, Render, Runner, World } from 'matter-js';
+// import { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const engine = Engine.create();
+  const render = Render.create({
+    engine,
+    element: document.body,
+    options: {
+      wireframes: false,
+      background: "#F7F4C8",
+      width: 420,
+      height: 850,
+    }
+  });
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const world = engine.world;
+  const leftWall = Bodies.rectangle(15, 395, 30, 790, {
+    isStatic: true,
+    render: { fillStyle: "#E6B143"}
+  });
+
+  World.add(world, [leftWall])
+
+  // return (
+    // <>
+    Render.run(render)
+    Runner.run(engine)
+    // </>
+  // )
 }
 
 export default App

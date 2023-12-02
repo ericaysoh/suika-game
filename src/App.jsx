@@ -77,6 +77,7 @@ function App() {
   let currentBody = null;
   let currentFruit = null;
   let disableAction = false;
+  let interval = null;
 
   function addFruit() {
     const index = Math.floor(Math.random() * 5);
@@ -107,18 +108,26 @@ function App() {
     
     switch (event.code) {
       case "KeyA":
-        if (currentBody.position.x - currentFruit.radius > 30)
-          Body.setPosition(currentBody, {
-            x: currentBody.position.x - 10,
-            y: currentBody.position.y
-          });
+        if (interval) return;
+        interval = setInterval(() => {
+
+          if (currentBody.position.x - currentFruit.radius > 30)
+            Body.setPosition(currentBody, {
+              x: currentBody.position.x - 2,
+              y: currentBody.position.y
+            });
+        }, 5)
           break;
       case "KeyD":
-        if (currentBody.position.x + currentFruit.radius < 590)
+        if (interval) return;
+        interval = setInterval(() => {
+
+          if (currentBody.position.x + currentFruit.radius < 590)
           Body.setPosition(currentBody, {
-            x: currentBody.position.x + 10,
+            x: currentBody.position.x + 2,
             y: currentBody.position.y
           });
+        })
           break;
         case "KeyS":
           currentBody.isSleeping = false;
@@ -128,6 +137,16 @@ function App() {
             disableAction = false;
           }, 1000); // using setTimeout to control flow of adding fruit body
           break;
+    }
+  }
+
+  // helps the fruits to glide smoothly (along with the interval/setInterval under the setkeydown switch cases)
+  window.onkeyup = (event) => {
+    switch (event.code) {
+      case "KeyA":
+      case "KeyD":
+        clearInterval(interval);
+        interval = null;
     }
   }
 

@@ -37,6 +37,7 @@ function App() {
       render: { fillStyle: "#E6B143" },
     });
     const topLine = Bodies.rectangle(310, 150, 620, 2, {
+      name: "topLine",
       isStatic: true,
       isSensor: true,
       render: { fillStyle: "#E6B143" },
@@ -106,17 +107,19 @@ function App() {
     
     switch (event.code) {
       case "KeyA":
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x - 10,
-          y: currentBody.position.y
-        })
-        break;
+        if (currentBody.position.x - currentFruit.radius > 30)
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x - 10,
+            y: currentBody.position.y
+          });
+          break;
       case "KeyD":
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x + 10,
-          y: currentBody.position.y
-        })
-        break;
+        if (currentBody.position.x + currentFruit.radius < 590)
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x + 10,
+            y: currentBody.position.y
+          });
+          break;
         case "KeyS":
           currentBody.isSleeping = false;
           disableAction = true;
@@ -152,8 +155,12 @@ function App() {
           console.log('newfruit', newFruit.name)
         World.add(world, newBody)
       }
-    })
-  })
+
+      if (!disableAction && (collision.bodyA.name === "topLine" || collision.bodyB.name === "topLine")) {
+        alert("Game over");
+      }
+    });
+  });
 
 
   addFruit();

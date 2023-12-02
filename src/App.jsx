@@ -128,9 +128,17 @@ function App() {
     }
   }
 
+  Events.on(engine, "collisionStart", (event) => {
+    event.pairs.forEach((collision) => {
+      if (collision.bodyA.index === collision.bodyB.index) {
+        World.remove(world, [collision.bodyA, collision.bodyB]);
+      }
+    })
+  })
+
+
   addFruit();
 }
-
 
 
 

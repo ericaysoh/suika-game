@@ -2,6 +2,7 @@ import { Bodies, Body, Engine, Events, Render, Runner, World } from "matter-js";
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import FRUITS from "./fruits";
+// import counterBox from "./counter";
 
 function App() {
   const engine = Engine.create();
@@ -16,7 +17,7 @@ function App() {
       wireframes: false,
       background: "#F7F4C8",
       width: 600,
-      height: 800,
+      height: 700,
       // showAxes: false
     },
   });
@@ -32,11 +33,11 @@ function App() {
       isStatic: true,
       render: { fillStyle: "#E6B143" },
     });
-    const ground = Bodies.rectangle(310, 770, 620, 60, {
+    const ground = Bodies.rectangle(310, 670, 620, 60, {
       isStatic: true,
       render: { fillStyle: "#E6B143" },
     });
-    const topLine = Bodies.rectangle(310, 150, 620, 2, {
+    const topLine = Bodies.rectangle(310, 120, 620, 2, {
       name: "topLine",
       isStatic: true,
       isSensor: true,
@@ -150,6 +151,10 @@ function App() {
     }
   }
 
+  const [ score, setScore ] = useState(0);
+  // const idx = useRef(0);
+  // const countRef = useRef(0);
+  let count = 0;
   Events.on(engine, "collisionStart", (event) => {
     event.pairs.forEach((collision) => {
       if (collision.bodyA.index === collision.bodyB.index) {
@@ -157,7 +162,7 @@ function App() {
         if (index === FRUITS.length - 1) { // checks if fruit is watermelon - no need to make another fruit if so
           return;
         }
-        console.log('hey')
+        
         World.remove(world, [collision.bodyA, collision.bodyB]);
         const newFruit = FRUITS[index+1];
         const newBody = Bodies.circle(
@@ -171,18 +176,38 @@ function App() {
             index: index+1
           }
         );
-          console.log('newfruit', newFruit.name)
         World.add(world, newBody)
+        // let currCount = count;
+        // setCount(currCount += (index+1)*3)
+        // Counter(index);
+        count += (index+1)*3
       }
 
       if (!disableAction && (collision.bodyA.name === "topLine" || collision.bodyB.name === "topLine")) {
-        alert("Game over");
+        alert(`Game over. Your score is ${count}`);
+        setScore(count);
+        // setScore(JSON.parse(window.localStroage.getItem('score')));
       }
     });
   });
 
+  // function Counter(index) {
+  //   const [ count, setCount ] = useState(0);
+  //   console.log('countttt', count)
+  //   let currCount = count;
+  //   setCount(currCount += (index+1)*3);
+  //   return count;
+  // }
 
   addFruit();
+  
+  return (
+    <div>
+      <div>
+      Current score: {score}
+      </div>
+    </div>
+  )
 }
 
 

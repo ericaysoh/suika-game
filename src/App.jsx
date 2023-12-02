@@ -1,4 +1,4 @@
-import { Bodies, Engine, Render, Runner, World } from "matter-js";
+import { Bodies, Body, Engine, Events, Render, Runner, World } from "matter-js";
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import FRUITS from "./fruits";
@@ -73,12 +73,17 @@ function App() {
 
   }, []);
 
+  let currentBody = null;
+  let currentFruit = null;
+  let disableAction = false;
+
   function addFruit() {
-    const index = 5;
+    const index = Math.floor(Math.random() * 5);
     const fruit = FRUITS[index];
 
     const body = Bodies.circle(300, 50, fruit.radius, {
       index: index,
+      isSleeping: true, // prevents new fruits from falling automatically
       render: {
         sprite: { texture: `${fruit.name}.png` },
       },
@@ -86,10 +91,47 @@ function App() {
       // frictionAir: 0.01
     });
 
+    currentBody = body;
+    currentFruit = fruit;
+
     World.add(world, body);
+  }
+
+
+  // vanilla JS:
+  window.onkeydown = (event) => {
+    if (disableAction) {
+      return;
+    }
+    
+    switch (event.code) {
+      case "KeyA":
+        Body.setPosition(currentBody, {
+          x: currentBody.position.x - 10,
+          y: currentBody.position.y
+        })
+        break;
+      case "KeyD":
+        Body.setPosition(currentBody, {
+          x: currentBody.position.x + 10,
+          y: currentBody.position.y
+        })
+        break;
+        case "KeyS":
+          currentBody.isSleeping = false;
+          disableAction = true;
+          setTimeout(() => {
+            addFruit();
+            disableAction = false;
+          }, 1000); // using setTimeout to control flow of adding fruit body
+          break;
+    }
   }
 
   addFruit();
 }
+
+
+
 
 export default App;

@@ -131,7 +131,26 @@ function App() {
   Events.on(engine, "collisionStart", (event) => {
     event.pairs.forEach((collision) => {
       if (collision.bodyA.index === collision.bodyB.index) {
+        const index = collision.bodyA.index;
+        if (index === FRUITS.length - 1) { // checks if fruit is watermelon - no need to make another fruit if so
+          return;
+        }
+        console.log('hey')
         World.remove(world, [collision.bodyA, collision.bodyB]);
+        const newFruit = FRUITS[index+1];
+        const newBody = Bodies.circle(
+          collision.collision.supports[0].x, // the x coordinate of the collision point
+          collision.collision.supports[0].y, // the y coordinate of the collision point
+          newFruit.radius,
+          {
+            render: {
+              sprite: { texture: `${newFruit.name}.png` },
+            },
+            index: index+1
+          }
+        );
+          console.log('newfruit', newFruit.name)
+        World.add(world, newBody)
       }
     })
   })

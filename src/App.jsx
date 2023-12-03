@@ -44,23 +44,6 @@ function App() {
       render: { fillStyle: "#E6B143" },
     });
 
-    // const leftWall = Bodies.rectangle(15, 395, 30, 790, {
-    //   isStatic: true,
-    //   render: { fillStyle: "#E6B143" },
-    // });
-    // const rightWall = Bodies.rectangle(650, 395, 30, 790, {
-    //   isStatic: true,
-    //   render: { fillStyle: "#E6B143" },
-    // });
-    // const ground = Bodies.rectangle(canvasCenter, 820, canvasWidth, 60, {
-    //   isStatic: true,
-    //   render: { fillStyle: "#E6B143" },
-    // });
-    // const topLine = Bodies.rectangle(canvasCenter, 150, canvasWidth, 2, {
-    //   isStatic: true,
-    //   render: { fillStyle: "#E6B143" },
-    // });
-
     World.add(world, [leftWall, rightWall, ground, topLine]);
 
     Render.run(render);
@@ -108,36 +91,37 @@ function App() {
     }
     
     switch (event.code) {
+
       case "KeyA":
         if (interval) return;
         interval = setInterval(() => {
-
           if (currentBody.position.x - currentFruit.radius > 30)
             Body.setPosition(currentBody, {
               x: currentBody.position.x - 2,
               y: currentBody.position.y
             });
         }, 5)
-          break;
+        break;
+
       case "KeyD":
         if (interval) return;
         interval = setInterval(() => {
-
           if (currentBody.position.x + currentFruit.radius < 590)
           Body.setPosition(currentBody, {
             x: currentBody.position.x + 2,
             y: currentBody.position.y
           });
         })
-          break;
-        case "KeyS":
-          currentBody.isSleeping = false;
-          disableAction = true;
-          setTimeout(() => {
-            addFruit();
-            disableAction = false;
-          }, 1000); // using setTimeout to control flow of adding fruit body
-          break;
+        break;
+
+      case "KeyS":
+        currentBody.isSleeping = false;
+        disableAction = true;
+        setTimeout(() => {
+          addFruit();
+          disableAction = false;
+        }, 1000); // using setTimeout to control flow of adding fruit body
+        break;
     }
   }
 
@@ -152,6 +136,8 @@ function App() {
   }
 
   const [ score, setScore ] = useState(0);
+  // const [ count, setCount ] = useState(0);
+  // const counterRef = useRef();
   // const idx = useRef(0);
   // const countRef = useRef(0);
   let count = 0;
@@ -179,6 +165,7 @@ function App() {
         World.add(world, newBody)
         // let currCount = count;
         // setCount(currCount += (index+1)*3)
+        // setCount((prevCount) => prevCount + (index+1)*3)
         // Counter(index);
         count += (index+1)*3
       }
@@ -191,12 +178,18 @@ function App() {
     });
   });
 
+  // useEffect(() => {
+  //   setScore(window.localStorage.setItem('score', count));
+  // }, [count])
+
   // function Counter(index) {
   //   const [ count, setCount ] = useState(0);
   //   console.log('countttt', count)
   //   let currCount = count;
   //   setCount(currCount += (index+1)*3);
-  //   return count;
+  //   return (
+  //     <div></div>
+  //   );
   // }
 
   addFruit();
@@ -204,12 +197,22 @@ function App() {
   return (
     <div>
       <div>
+      {/* Current score: {JSON.parse(window.localStroage.getItem('score'))} */}
       Current score: {score}
+      {/* <Counter count={count}/> */}
+      {/* {counterRef.current || <Counter ref={counterRef} count={count}/>} */}
       </div>
     </div>
   )
 }
 
-
+// function Counter({ count }) {
+//   return (
+//     <div>
+//       {/* Display the count */}
+//       Count: {count}
+//     </div>
+//   );
+// }
 
 export default App;

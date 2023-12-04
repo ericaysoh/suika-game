@@ -106,7 +106,7 @@ function App() {
       case "KeyD":
         if (interval) return;
         interval = setInterval(() => {
-          if (currentBody.position.x + currentFruit.radius < 590)
+          if (currentBody.position.x + currentFruit.radius < 570)
           Body.setPosition(currentBody, {
             x: currentBody.position.x + 2,
             y: currentBody.position.y
@@ -196,7 +196,7 @@ function App() {
   
   return (
     <div>
-      <div>
+      <div style={{margin:"11vw"}}>
       {/* Current score: {JSON.parse(window.localStroage.getItem('score'))} */}
       Current score: {score}
       {/* <Counter count={count}/> */}
